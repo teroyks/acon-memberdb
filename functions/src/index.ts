@@ -8,6 +8,9 @@ export const helloWorld = functions.https.onRequest((request, response) => {
   response.send('Hello from Firebase!!')
 })
 
+/**
+ * Add a timestamp to every new purchase record.
+ */
 export const createPurchase = functions.firestore
   .document('purchases/{purchaseId}')
   .onCreate((snapshot, context) => {
@@ -19,6 +22,10 @@ export const createPurchase = functions.firestore
       })
   })
 
+/**
+ * Create a 'createdAt' timestamp object.
+ * @returns timestamp object to add to a document reference.
+ */
 const createdAtTimestamp = () => ({
   createdAt: firestore.FieldValue.serverTimestamp(),
 })
