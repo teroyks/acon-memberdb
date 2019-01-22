@@ -16,3 +16,8 @@ In `functions`. Currently contains only a demo `helloWorld` function with HTTP t
 #### helloWorld
 
 - demo
+
+#### createdAt
+
+- triggered by: `onCreate` (purchases, members)
+- adds a `createdAt` timestamp to new records
