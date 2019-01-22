@@ -1,0 +1,18 @@
+{
+  "orderId": 1,
+  "receiptNr": "RECEIPT-000131-2019",
+  "price": 0,
+  "discountCode": null,
+  "lastName": "Maksaja",
+  "firstName": "Matti",
+  "company": null,
+  "email": "teroyks+acon10@gmail.com",
+  "phone": null,
+  "streetAddress": null,
+  "zip": null,
+  "city": null,
+  "country": "Suomi",
+  "purchaseDateTime": "2019-01-18 08:48:49.826579+00:00",
+  "purchaseHandled": false,
+  "purchaseId": "r_1"
+}
