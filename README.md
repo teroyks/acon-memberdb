@@ -17,7 +17,9 @@ In `functions`. Currently contains only a demo `helloWorld` function with HTTP t
 
 - demo
 
-#### createdAt
+#### addTimestampToNew\*
 
+- `addTimestampToNewPurchase`
+- `addTimestampToNewMember`
 - triggered by: `onCreate` (purchases, members)
 - adds a `createdAt` timestamp to new records
