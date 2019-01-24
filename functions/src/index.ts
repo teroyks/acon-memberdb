@@ -9,6 +9,14 @@ export const helloWorld = functions.https.onRequest((request, response) => {
 })
 
 /**
+ * Create a 'createdAt' timestamp object.
+ * @returns timestamp object to add to a document reference.
+ */
+const createdAtTimestamp = () => ({
+  createdAt: firestore.FieldValue.serverTimestamp(),
+})
+
+/**
  * Add a timestamp to every new purchase record.
  */
 export const createPurchase = functions.firestore
@@ -23,9 +31,15 @@ export const createPurchase = functions.firestore
   })
 
 /**
- * Create a 'createdAt' timestamp object.
- * @returns timestamp object to add to a document reference.
+ * Add a timestamp to every new member record.
  */
-const createdAtTimestamp = () => ({
-  createdAt: firestore.FieldValue.serverTimestamp(),
-})
+export const createMember = functions.firestore
+  .document('members/{memberId}')
+  .onCreate((snapshot, context) => {
+    return snapshot.ref
+      .set(createdAtTimestamp(), { merge: true })
+      .catch((err) => {
+        console.log(err)
+        return false
+      })
+  })
