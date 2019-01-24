@@ -17,29 +17,28 @@ const createdAtTimestamp = () => ({
 })
 
 /**
+ * Add a 'createdAt' property to a document snapshot.
+ * @param snapshot
+ */
+const addCreatedAtTimestamp = (snapshot: firestore.DocumentSnapshot) => {
+  return snapshot.ref
+    .set(createdAtTimestamp(), { merge: true })
+    .catch((err) => {
+      console.log(err)
+      return false
+    })
+}
+
+/**
  * Add a timestamp to every new purchase record.
  */
-export const createPurchase = functions.firestore
+export const addTimestampToNewPurchase = functions.firestore
   .document('purchases/{purchaseId}')
-  .onCreate((snapshot, context) => {
-    return snapshot.ref
-      .set(createdAtTimestamp(), { merge: true })
-      .catch((err) => {
-        console.log(err)
-        return false
-      })
-  })
+  .onCreate((snapshot, context) => addCreatedAtTimestamp(snapshot))
 
 /**
  * Add a timestamp to every new member record.
  */
-export const createMember = functions.firestore
+export const addTimestampToNewMember = functions.firestore
   .document('members/{memberId}')
-  .onCreate((snapshot, context) => {
-    return snapshot.ref
-      .set(createdAtTimestamp(), { merge: true })
-      .catch((err) => {
-        console.log(err)
-        return false
-      })
-  })
+  .onCreate((snapshot, context) => addCreatedAtTimestamp(snapshot))
