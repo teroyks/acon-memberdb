@@ -23,3 +23,7 @@ In `functions`. Currently contains only a demo `helloWorld` function with HTTP t
 - `addTimestampToNewMember`
 - triggered by: `onCreate` (purchases, members)
 - adds a `createdAt` timestamp to new records
+
+## Testing
+
+- `npm test`: run module tests

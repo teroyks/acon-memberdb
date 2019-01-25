@@ -7,6 +7,7 @@
     "serve": "concurrently \"npm:watch\" \"firebase serve --only functions\"",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
+    "test": "mocha -r ts-node/register test/**/*.spec.ts",
     "watch": "tsc --watch",
     "logs": "firebase functions:log"
   },
@@ -16,7 +17,12 @@
     "firebase-functions": "^2.1.0"
   },
   "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.5",
+    "chai": "^4.2.0",
     "concurrently": "^4.1.0",
+    "mocha": "^5.2.0",
+    "ts-node": "^8.0.1",
     "tslint": "^5.12.0",
     "typescript": "^3.2.2"
   },
