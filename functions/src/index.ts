@@ -59,19 +59,19 @@ export const updateNameDataOnWrite = functions.firestore
     const submittedMemberData = change.after.data() as MemberNames
 
     if (!namesHaveChanged(oldMemberData, submittedMemberData)) {
-      console.log('No changes to member names')
+      // console.log('No changes to member names')
       return null
     }
 
-    console.log('Member name properties changed - updating name data')
+    // console.log('Member name properties changed - updating name data')
     const newMemberData = updateNameData(submittedMemberData)
 
-    console.log('old document', oldMemberData)
-    console.log('changed document', newMemberData)
+    // console.log('old document', oldMemberData)
+    // console.log('changed document', newMemberData)
 
     // return newMemberData
     return change.after.ref.set(newMemberData).catch((err) => {
-      console.log(err)
+      console.error(err)
       return false
     })
   })
