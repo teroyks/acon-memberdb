@@ -23,14 +23,20 @@ const displayName = ({ firstName, lastName, badgeName }: MemberNames) =>
   badgeName ? badgeName : fullName([firstName, lastName])
 
 /**
+ * Constructs real name for sorting
+ * @param param0
+ */
+const fullNameSort = ({ firstName, lastName }: MemberNames) =>
+  fullName([lastName, firstName])
+
+/**
  * Construct a name for sorting by display name
  * @param param0 member name fields
  */
 const displayNameSort = ({ firstName, lastName, badgeName }: MemberNames) => {
-  const fullNameSort = fullName([lastName, firstName])
   if (badgeName) {
     return badgeName === fullName([firstName, lastName])
-      ? fullNameSort
+      ? fullNameSort({ firstName, lastName, badgeName: null })
       : badgeName
   }
 
@@ -51,17 +57,10 @@ const needToCheckDisplayNameSort = ({
 }: MemberNames) => {
   if (!badgeName) return false
 
-  if (badgeName == fullName([firstName, lastName])) return false
+  if (badgeName === fullName([firstName, lastName])) return false
 
   return true
 }
-
-/**
- * Constructs real name for sorting
- * @param param0
- */
-const fullNameSort = ({ firstName, lastName }: MemberNames) =>
-  fullName([lastName, firstName])
 
 const updateNameData = (memberData: any) => {
   const updatedMember = Object.assign({}, memberData)
