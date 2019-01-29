@@ -1,6 +1,12 @@
+import * as assert from 'assert'
 import * as functions from 'firebase-functions'
 
-import addCreatedAtTimestamp from './document-created-at'
+import {
+  addCreatedAtTimestamp,
+  filterOutTimestamps,
+  updateModifiedAtTimestamp,
+} from './document-timestamp'
+import { MemberNames, updateNameData } from './member'
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
@@ -22,3 +28,50 @@ export const addTimestampToNewPurchase = functions.firestore
 export const addTimestampToNewMember = functions.firestore
   .document('members/{memberId}')
   .onCreate((snapshot, context) => addCreatedAtTimestamp(snapshot))
+
+export const updateTimestampOnMemberUpdate = functions.firestore
+  .document('members/{memberId}')
+  .onUpdate((change, context) => {
+    const dataBefore = filterOutTimestamps(change.before.data() || {})
+    const dataAfter = filterOutTimestamps(change.after.data() || {})
+
+    try {
+      assert.notDeepEqual(dataBefore, dataAfter)
+    } catch (err) {
+      return null
+    }
+
+    return updateModifiedAtTimestamp(change.after)
+  })
+
+const namesHaveChanged = (oldNames: MemberNames, newNames: MemberNames) =>
+  oldNames.firstName !== newNames.firstName ||
+  oldNames.lastName !== newNames.lastName ||
+  oldNames.badgeName !== newNames.badgeName
+
+export const updateNameDataOnWrite = functions.firestore
+  .document('members/{memberId}')
+  .onWrite((change, context) => {
+    const oldMemberData = change.before.data() as MemberNames
+
+    if (!change.after.exists) return null
+
+    const submittedMemberData = change.after.data() as MemberNames
+
+    if (!namesHaveChanged(oldMemberData, submittedMemberData)) {
+      console.log('No changes to member names')
+      return null
+    }
+
+    console.log('Member name properties changed - updating name data')
+    const newMemberData = updateNameData(submittedMemberData)
+
+    console.log('old document', oldMemberData)
+    console.log('changed document', newMemberData)
+
+    // return newMemberData
+    return change.after.ref.set(newMemberData).catch((err) => {
+      console.log(err)
+      return false
+    })
+  })
