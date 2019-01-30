@@ -1,19 +1,27 @@
 /**
  * List of public members
  */
+
+// member data received from a firestore record
 type memberData = {
   displayName: string
   publishPermission: boolean
 }
 
-const getMemberPublicData = (member: memberData) => {
-  return member.displayName
+// member data properties in the public list
+type publicMemberData = {
+  name: string
 }
 
-const toMarkdownList = (itemList: string[]) =>
-  itemList.map((item) => `* ${item}`)
+const getMemberPublicData = (member: memberData): publicMemberData => {
+  return { name: member.displayName }
+}
 
-const getMembersList = (members: memberData[]) => {
+/**
+ * List only the public members' data.
+ * @param members
+ */
+const getPublicMembersList = (members: memberData[]) => {
   const publicMembers = members
     .filter((member) => member.publishPermission)
     .map((member) => getMemberPublicData(member))
@@ -27,12 +35,31 @@ const getPrivateMemberCount = (members: memberData[]) => {
   return privateMembers.length
 }
 
-const membersListMarkdown = (members: memberData[]) => {
-  const privateCount = getPrivateMemberCount(members)
-  const privateLine = `In addition, ${privateCount} members did not wish their names to be published`
-  const lines = [...getMembersList(members), privateLine]
-  return toMarkdownList(lines).join('\n')
+class List {
+  allMembers: memberData[]
+
+  constructor(members: memberData[]) {
+    this.allMembers = members
+  }
+
+  toMarkdown() {
+    const memberToMarkdown = (member: publicMemberData) => member.name
+
+    const publicList = getPublicMembersList(this.allMembers).map((member) =>
+      memberToMarkdown(member)
+    )
+
+    const toMarkdownList = (itemList: string[]) =>
+      itemList.map((item) => `* ${item}`)
+
+    const privateCount = getPrivateMemberCount(this.allMembers)
+    const privateLine = `In addition, ${privateCount} members did not wish their names to be published`
+
+    const lines = [...publicList, privateLine]
+
+    return toMarkdownList(lines).join('\n')
+  }
 }
 
-export default membersListMarkdown
+export default List
 export { memberData }

@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import 'mocha'
 
-import membersList, { memberData } from '../src/memberslist'
+import List, { memberData } from '../src/memberslist'
 
 describe('Members list', () => {
   describe('Format as markdown', () => {
@@ -11,7 +11,8 @@ describe('Members list', () => {
         { displayName: 'Baz Baz', publishPermission: true },
       ]
 
-      expect(membersList(members)).to.match(/^\* Foo Bar\n\* Baz Baz\n/)
+      const list = new List(members)
+      expect(list.toMarkdown()).to.match(/^\* Foo Bar\n\* Baz Baz\n/)
     })
 
     it('should only list public members', () => {
@@ -22,7 +23,7 @@ describe('Members list', () => {
         { displayName: 'I am secret', publishPermission: false },
       ]
 
-      const markdownList = membersList(members)
+      const markdownList = new List(members).toMarkdown()
       expect(markdownList).to.match(/^\* I am public\n\* Yay publish me\n/)
       expect(markdownList).to.not.match(/private/)
     })
@@ -34,7 +35,8 @@ describe('Members list', () => {
         { displayName: 'private2', publishPermission: false },
       ]
 
-      expect(membersList(members)).to.equal(
+      const markdownList = new List(members).toMarkdown()
+      expect(markdownList).to.equal(
         '* public\n* In addition, 2 members did not wish their names to be published'
       )
     })
