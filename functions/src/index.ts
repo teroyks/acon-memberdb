@@ -1,12 +1,13 @@
 import * as assert from 'assert'
 import * as functions from 'firebase-functions'
-
 import {
   addCreatedAtTimestamp,
   filterOutTimestamps,
   updateModifiedAtTimestamp,
 } from './document-timestamp'
+import * as store from './firestore'
 import { MemberNames, updateNameData } from './member'
+import List, * as membersList from './memberslist'
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
@@ -76,3 +77,13 @@ export const updateNameDataOnWrite = functions.firestore
       return false
     })
   })
+
+/**
+ * Fetch formatted members list for the website
+ */
+export const listMembers = functions.https.onRequest(async (req, res) => {
+  res.setHeader('content-type', 'text/plain')
+  const allMembers = (await store.fetchMembers()) as membersList.memberData[]
+  const members = new List(allMembers)
+  res.status(200).send(members.toMarkdown())
+})
