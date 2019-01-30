@@ -6,16 +6,25 @@
 type memberData = {
   displayName: string
   publishPermission: boolean
+  twitter: string | null
 }
 
 // member data properties in the public list
 type publicMemberData = {
   name: string
+  twitter: string | null
+  twitterURL: string | null
 }
 
-const getMemberPublicData = (member: memberData): publicMemberData => {
-  return { name: member.displayName }
-}
+const twitterHandleWithoutAt = (handle: string) => handle.replace(/^@/, '')
+const createTwitterUrl = (handle: string | null) =>
+  handle ? `https://twitter.com/${twitterHandleWithoutAt(handle)}` : null
+
+const getMemberPublicData = (member: memberData): publicMemberData => ({
+  name: member.displayName,
+  twitter: member.twitter,
+  twitterURL: createTwitterUrl(member.twitter),
+})
 
 /**
  * List only the public members' data.
@@ -43,7 +52,12 @@ class List {
   }
 
   toMarkdown() {
-    const memberToMarkdown = (member: publicMemberData) => member.name
+    const memberToMarkdown = (member: publicMemberData) => {
+      const props = [member.name]
+      const handle = member.twitter
+      if (handle) props.push(`[${handle}](${createTwitterUrl(handle)})`)
+      return props.join(' ')
+    }
 
     const publicList = getPublicMembersList(this.allMembers).map((member) =>
       memberToMarkdown(member)
