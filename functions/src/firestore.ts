@@ -21,4 +21,15 @@ const fetchMembers = async () => {
   return querySnapshot.docs.map((doc) => doc.data())
 }
 
-export { fetchMembers }
+/**
+ * Fetch last import date
+ * @returns Promise Date | null
+ */
+const fetchUpdateDate = async (): Promise<Date | null> => {
+  const querySnapshot = await store.doc('/meta/status').get()
+  const data = querySnapshot.data()
+
+  return data ? data.importedAt.toDate() : null
+}
+
+export { fetchMembers, fetchUpdateDate }
