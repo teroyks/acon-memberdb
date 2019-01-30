@@ -45,6 +45,7 @@ export const updateTimestampOnMemberUpdate = functions.firestore
   })
 
 const namesHaveChanged = (oldNames: MemberNames, newNames: MemberNames) =>
+  !oldNames || // new record
   oldNames.firstName !== newNames.firstName ||
   oldNames.lastName !== newNames.lastName ||
   oldNames.badgeName !== newNames.badgeName
