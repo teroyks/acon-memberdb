@@ -47,7 +47,6 @@ describe('Members list', () => {
       ]
 
       const markdownList = new List(members).toMarkdown()
-      console.debug(markdownList)
       expect(markdownList).to.match(
         /^\* foo \[@tweeter]\(https:\/\/twitter\.com\/tweeter\)\n/
       )
