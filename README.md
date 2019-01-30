@@ -27,3 +27,4 @@ In `functions`. Currently contains only a demo `helloWorld` function with HTTP t
 ## Testing
 
 - `npm test`: run module tests
+- `npm run test:watch`: continuously run tests on save

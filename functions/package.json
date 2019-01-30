@@ -8,6 +8,7 @@
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "test": "mocha -r ts-node/register test/**/*.spec.ts",
+    "test:watch": "npm run test -- --watch-extensions ts --watch R min",
     "watch": "tsc --watch",
     "logs": "firebase functions:log"
   },
