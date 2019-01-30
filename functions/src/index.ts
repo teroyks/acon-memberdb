@@ -83,7 +83,22 @@ export const updateNameDataOnWrite = functions.firestore
  */
 export const listMembers = functions.https.onRequest(async (req, res) => {
   res.setHeader('content-type', 'text/plain')
-  const allMembers = (await store.fetchMembers()) as membersList.memberData[]
-  const members = new List(allMembers)
-  res.status(200).send(members.toMarkdown())
+  try {
+    const membersPromise = store.fetchMembers() as Promise<
+      membersList.memberData[]
+    >
+    const [allMembers, importedAt] = await Promise.all([
+      membersPromise,
+      store.fetchUpdateDate(),
+    ])
+    const members = new List(allMembers)
+
+    const updateMessage = `Updated at ${
+      importedAt ? importedAt.toDateString() : 'Unknown'
+    }`
+    res.status(200).send(members.toMarkdown() + '\n\n' + updateMessage)
+  } catch (err) {
+    console.error(err)
+    res.status(500).send('Internal Server Error')
+  }
 })
