@@ -9,7 +9,7 @@ In `functions`. Currently contains only a demo `helloWorld` function with HTTP t
 ### Dev Commands
 
 - `npm run serve`: start local dev server
-- `npm run deploy`: deploy function to Firebase
+- `npm run deploy`: deploy functions and security rules to Firebase
 
 ### Functions
 
