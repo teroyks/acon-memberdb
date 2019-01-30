@@ -2,6 +2,8 @@
  * List of public members
  */
 
+import * as twitterUtil from './twitterutil'
+
 // member data received from a firestore record
 type memberData = {
   displayName: string
@@ -16,14 +18,10 @@ type publicMemberData = {
   twitterURL: string | null
 }
 
-const twitterHandleWithoutAt = (handle: string) => handle.replace(/^@/, '')
-const createTwitterUrl = (handle: string | null) =>
-  handle ? `https://twitter.com/${twitterHandleWithoutAt(handle)}` : null
-
 const getMemberPublicData = (member: memberData): publicMemberData => ({
   name: member.displayName,
   twitter: member.twitter,
-  twitterURL: createTwitterUrl(member.twitter),
+  twitterURL: twitterUtil.createUrl(member.twitter),
 })
 
 /**
@@ -55,7 +53,7 @@ class List {
     const memberToMarkdown = (member: publicMemberData) => {
       const props = [member.name]
       const handle = member.twitter
-      if (handle) props.push(`[${handle}](${createTwitterUrl(handle)})`)
+      if (handle) props.push(`[${handle}](${member.twitterURL})`)
       return props.join(' ')
     }
 
