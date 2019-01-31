@@ -98,6 +98,7 @@ export const listMembers = functions.https.onRequest(async (req, res) => {
     }`
     res.status(200).send(members.toMarkdown() + '\n\n' + updateMessage)
   } catch (err) {
+    console.error('Could not fetch members list')
     console.error(err)
     res.status(500).send('Internal Server Error')
   }
