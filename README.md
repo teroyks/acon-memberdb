@@ -28,3 +28,10 @@ In `functions`. Currently contains only a demo `helloWorld` function with HTTP t
 
 - `npm test`: run module tests
 - `npm run test:watch`: continuously run tests on save
+
+## Installation
+
+- `firebase init`
+  - add Firebase project that has Firestore enabled
+- `firebase use --add`
+  - add additional projects (e.g. production environment)
