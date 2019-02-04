@@ -46,7 +46,7 @@ const displayNameSort = ({ firstName, lastName, badgeName }: MemberNames) => {
 /**
  * Checks if display name sort order can be determined automatically
  * - false if no badge name given (sort by lastname)
- * - false if badge name given but equals to "firstname lastname" (sort by lastname)
+ * - false if badge name given but matches full name (sort by lastname)
  * - true otherwise (sort by badge name by default)
  * @param param0
  */
@@ -56,8 +56,8 @@ const needToCheckDisplayNameSort = ({
   badgeName,
 }: MemberNames) => {
   if (!badgeName) return false
-
   if (badgeName === fullName([firstName, lastName])) return false
+  if (badgeName === fullName([lastName, firstName])) return false
 
   return true
 }
@@ -70,8 +70,6 @@ const updateNameData = (memberData: any) => {
   updatedMember.checkDisplayNameSort = needToCheckDisplayNameSort(memberData)
 
   updatedMember.fullNameSort = fullNameSort(memberData)
-
-  if (!memberData.badgeName) updatedMember.badgeName = displayName(memberData)
 
   return updatedMember
 }
