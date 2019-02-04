@@ -1,9 +1,5 @@
 import * as functions from 'firebase-functions'
-import {
-  addCreatedAtTimestamp,
-  createdAtTimestamp,
-  modifiedAtTimestamp,
-} from './document-timestamp'
+import { createdAtTimestamp, modifiedAtTimestamp } from './document-timestamp'
 import * as store from './firestore'
 import { MemberNames, updateNameData } from './member'
 import List, * as membersList from './memberslist'
@@ -13,29 +9,26 @@ import List, * as membersList from './memberslist'
  */
 export const addTimestampToNewPurchase = functions.firestore
   .document('purchases/{purchaseId}')
-  .onCreate((snapshot, context) => addCreatedAtTimestamp(snapshot))
+  .onCreate((snapshot) =>
+    snapshot.ref.set(createdAtTimestamp(), { merge: true })
+  )
 
 /**
  * Update generated names and add 'createdAt' timestamp to new member records.
  */
 export const addNewMember = functions.firestore
   .document('members/{memberId}')
-  .onCreate((snapshot, context) => {
+  .onCreate((snapshot) => {
     const memberData = snapshot.data() as MemberNames
     console.log(
       `New member added: ${memberData.firstName} ${memberData.lastName}`
     )
-
     const memberWithUpdatedNameData = updateNameData(memberData)
-    return snapshot.ref
-      .set(
-        { ...memberWithUpdatedNameData, ...createdAtTimestamp() },
-        { merge: true }
-      )
-      .catch((err) => {
-        console.error(err)
-        return false
-      })
+
+    return snapshot.ref.set(
+      { ...memberWithUpdatedNameData, ...createdAtTimestamp() },
+      { merge: true }
+    )
   })
 
 const namesHaveChanged = (oldNames: MemberNames, newNames: MemberNames) =>
@@ -51,7 +44,7 @@ const namesHaveChanged = (oldNames: MemberNames, newNames: MemberNames) =>
  */
 export const updateMember = functions.firestore
   .document('members/{memberId}')
-  .onUpdate((change, context) => {
+  .onUpdate(async (change) => {
     const oldMemberData = change.before.data() as MemberNames
     console.log(
       `Member update triggered: ${oldMemberData.firstName} ${
@@ -71,15 +64,10 @@ export const updateMember = functions.firestore
 
     const memberWithUpdatedNameData = updateNameData(submittedMemberData)
 
-    return change.after.ref
-      .set(
-        { ...memberWithUpdatedNameData, ...modifiedAtTimestamp() },
-        { merge: true }
-      )
-      .catch((err) => {
-        console.error(err)
-        return false
-      })
+    return change.after.ref.set(
+      { ...memberWithUpdatedNameData, ...modifiedAtTimestamp() },
+      { merge: true }
+    )
   })
 
 /**
@@ -97,10 +85,10 @@ export const listMembers = functions.https.onRequest(async (req, res) => {
     ])
     const members = new List(allMembers)
 
-    const updateMessage = `Updated at ${
+    const updateMessage = `Updated on ${
       importedAt ? importedAt.toDateString() : 'Unknown'
     }`
-    res.status(200).send(members.toMarkdown() + '\n\n' + updateMessage)
+    res.send(members.toMarkdown() + '\n\n' + updateMessage)
   } catch (err) {
     console.error('Could not fetch members list')
     console.error(err)
