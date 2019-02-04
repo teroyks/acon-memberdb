@@ -1,9 +1,8 @@
-import * as assert from 'assert'
 import * as functions from 'firebase-functions'
 import {
   addCreatedAtTimestamp,
-  filterOutTimestamps,
-  updateModifiedAtTimestamp,
+  createdAtTimestamp,
+  modifiedAtTimestamp,
 } from './document-timestamp'
 import * as store from './firestore'
 import { MemberNames, updateNameData } from './member'
@@ -24,25 +23,26 @@ export const addTimestampToNewPurchase = functions.firestore
   .onCreate((snapshot, context) => addCreatedAtTimestamp(snapshot))
 
 /**
- * Add a timestamp to every new member record.
+ * Update generated names and add 'createdAt' timestamp to new member records.
  */
-export const addTimestampToNewMember = functions.firestore
+export const addNewMember = functions.firestore
   .document('members/{memberId}')
-  .onCreate((snapshot, context) => addCreatedAtTimestamp(snapshot))
+  .onCreate((snapshot, context) => {
+    const memberData = snapshot.data() as MemberNames
+    console.log(
+      `New member added: ${memberData.firstName} ${memberData.lastName}`
+    )
 
-export const updateTimestampOnMemberUpdate = functions.firestore
-  .document('members/{memberId}')
-  .onUpdate((change, context) => {
-    const dataBefore = filterOutTimestamps(change.before.data() || {})
-    const dataAfter = filterOutTimestamps(change.after.data() || {})
-
-    try {
-      assert.notDeepEqual(dataBefore, dataAfter)
-    } catch (err) {
-      return null
-    }
-
-    return updateModifiedAtTimestamp(change.after)
+    const memberWithUpdatedNameData = updateNameData(memberData)
+    return snapshot.ref
+      .set(
+        { ...memberWithUpdatedNameData, ...createdAtTimestamp() },
+        { merge: true }
+      )
+      .catch((err) => {
+        console.error(err)
+        return false
+      })
   })
 
 const namesHaveChanged = (oldNames: MemberNames, newNames: MemberNames) =>
@@ -51,31 +51,42 @@ const namesHaveChanged = (oldNames: MemberNames, newNames: MemberNames) =>
   oldNames.lastName !== newNames.lastName ||
   oldNames.badgeName !== newNames.badgeName
 
-export const updateNameDataOnWrite = functions.firestore
+/**
+ * Update generated names and add 'modifiedAt' timestamp to updated member records.
+ *
+ * Update record only if user-specified name fields have changed.
+ */
+export const updateMember = functions.firestore
   .document('members/{memberId}')
-  .onWrite((change, context) => {
+  .onUpdate((change, context) => {
     const oldMemberData = change.before.data() as MemberNames
-
-    if (!change.after.exists) return null
-
+    console.log(
+      `Member update triggered: ${oldMemberData.firstName} ${
+        oldMemberData.lastName
+      }`
+    )
     const submittedMemberData = change.after.data() as MemberNames
 
     if (!namesHaveChanged(oldMemberData, submittedMemberData)) {
-      // console.log('No changes to member names')
+      console.log('No change to member names.')
       return null
     }
 
-    // console.log('Member name properties changed - updating name data')
-    const newMemberData = updateNameData(submittedMemberData)
+    console.log('Member names have changed - updating name data.')
+    console.log('old', oldMemberData)
+    console.log('submitted', submittedMemberData)
 
-    // console.log('old document', oldMemberData)
-    // console.log('changed document', newMemberData)
+    const memberWithUpdatedNameData = updateNameData(submittedMemberData)
 
-    // return newMemberData
-    return change.after.ref.set(newMemberData).catch((err) => {
-      console.error(err)
-      return false
-    })
+    return change.after.ref
+      .set(
+        { ...memberWithUpdatedNameData, ...modifiedAtTimestamp() },
+        { merge: true }
+      )
+      .catch((err) => {
+        console.error(err)
+        return false
+      })
   })
 
 /**

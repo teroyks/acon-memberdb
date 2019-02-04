@@ -27,13 +27,22 @@ const updateModifiedAtTimestamp = (snapshot: firestore.DocumentSnapshot) => {
     })
 }
 
+const createdAtTimestamp = () => ({ createdAt: firestoreTimestamp() })
+const modifiedAtTimestamp = () => ({ modifiedAt: firestoreTimestamp() })
+
 type anyObject = {
   [key: string]: any
 }
 
-const filterOutTimestamps = (origObj: anyObject) =>
+const filterOutTimestamps = (origObj: anyObject): anyObject =>
   Object.keys(origObj)
     .filter((key) => !key.endsWith('edAt'))
     .reduce((obj, key) => ({ ...obj, [key]: origObj[key] }), {})
 
-export { addCreatedAtTimestamp, filterOutTimestamps, updateModifiedAtTimestamp }
+export {
+  addCreatedAtTimestamp,
+  createdAtTimestamp,
+  filterOutTimestamps,
+  modifiedAtTimestamp,
+  updateModifiedAtTimestamp,
+}
