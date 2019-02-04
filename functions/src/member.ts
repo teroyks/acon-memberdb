@@ -44,6 +44,18 @@ const displayNameSort = ({ firstName, lastName, badgeName }: MemberNames) => {
 }
 
 /**
+ * Checks if member name values have changed
+ * (ie. if needs to update name data)
+ * @param oldNames
+ * @param newNames
+ */
+const namesHaveChanged = (oldNames: MemberNames, newNames: MemberNames) =>
+  !oldNames || // new record
+  oldNames.firstName !== newNames.firstName ||
+  oldNames.lastName !== newNames.lastName ||
+  oldNames.badgeName !== newNames.badgeName
+
+/**
  * Checks if display name sort order can be determined automatically
  * - false if no badge name given (sort by lastname)
  * - false if badge name given but matches full name (sort by lastname)
@@ -74,4 +86,4 @@ const updateNameData = (memberData: any) => {
   return updatedMember
 }
 
-export { MemberNames, updateNameData }
+export { MemberNames, namesHaveChanged, updateNameData }

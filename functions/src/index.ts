@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions'
 import { createdAtTimestamp, modifiedAtTimestamp } from './document-timestamp'
 import * as store from './firestore'
-import { MemberNames, updateNameData } from './member'
+import { MemberNames, namesHaveChanged, updateNameData } from './member'
 import List, * as membersList from './memberslist'
 
 /**
@@ -30,12 +30,6 @@ export const addNewMember = functions.firestore
       { merge: true }
     )
   })
-
-const namesHaveChanged = (oldNames: MemberNames, newNames: MemberNames) =>
-  !oldNames || // new record
-  oldNames.firstName !== newNames.firstName ||
-  oldNames.lastName !== newNames.lastName ||
-  oldNames.badgeName !== newNames.badgeName
 
 /**
  * Update generated names and add 'modifiedAt' timestamp to updated member records.
