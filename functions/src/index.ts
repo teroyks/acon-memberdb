@@ -8,13 +8,6 @@ import * as store from './firestore'
 import { MemberNames, updateNameData } from './member'
 import List, * as membersList from './memberslist'
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-export const helloWorld = functions.https.onRequest((request, response) => {
-  response.send('Hello from Firebase!!')
-})
-
 /**
  * Add a timestamp to every new purchase record.
  */

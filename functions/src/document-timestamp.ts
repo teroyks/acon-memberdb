@@ -18,15 +18,6 @@ const addCreatedAtTimestamp = (snapshot: firestore.DocumentSnapshot) => {
     })
 }
 
-const updateModifiedAtTimestamp = (snapshot: firestore.DocumentSnapshot) => {
-  return snapshot.ref
-    .set({ modifiedAt: firestoreTimestamp() }, { merge: true })
-    .catch((err) => {
-      console.log(err)
-      return false
-    })
-}
-
 const createdAtTimestamp = () => ({ createdAt: firestoreTimestamp() })
 const modifiedAtTimestamp = () => ({ modifiedAt: firestoreTimestamp() })
 
@@ -44,5 +35,4 @@ export {
   createdAtTimestamp,
   filterOutTimestamps,
   modifiedAtTimestamp,
-  updateModifiedAtTimestamp,
 }
