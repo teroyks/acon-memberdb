@@ -1,0 +1,32 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Åcon member db",
+  "main": "index.js",
+  "dependencies": {
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0"
+  },
+  "devDependencies": {
+    "@types/react": "^16.8.1",
+    "@types/react-dom": "^16.0.11",
+    "parcel-bundler": "^1.11.0",
+    "typescript": "^3.3.1"
+  },
+  "scripts": {
+    "build": "parcel build ./src/index.html",
+    "prebuild": "rm -rf dist/*",
+    "start": "parcel ./src/index.html --open",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teroyks/acon-memberdb.git"
+  },
+  "author": "Tero Ykspetäjä",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/teroyks/acon-memberdb/issues"
+  },
+  "homepage": "https://github.com/teroyks/acon-memberdb#readme"
+}
