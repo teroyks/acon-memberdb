@@ -27,21 +27,18 @@ const displayName = ({ firstName, lastName, badgeName }: MemberNames) =>
  * @param param0
  */
 const fullNameSort = ({ firstName, lastName }: MemberNames) =>
-  fullName([lastName, firstName])
+  fullName([lastName, firstName]).toLowerCase()
 
 /**
  * Construct a name for sorting by display name
  * @param param0 member name fields
  */
-const displayNameSort = ({ firstName, lastName, badgeName }: MemberNames) => {
-  if (badgeName) {
-    return badgeName === fullName([firstName, lastName])
+const displayNameSort = ({ firstName, lastName, badgeName }: MemberNames) =>
+  badgeName
+    ? badgeName.toLowerCase() === fullName([firstName, lastName]).toLowerCase()
       ? fullNameSort({ firstName, lastName, badgeName: null })
-      : badgeName
-  }
-
-  return fullName([lastName, firstName])
-}
+      : badgeName.toLowerCase()
+    : fullNameSort({ firstName, lastName, badgeName })
 
 /**
  * Checks if member name values have changed
@@ -62,11 +59,7 @@ const namesHaveChanged = (oldNames: MemberNames, newNames: MemberNames) =>
  * - true otherwise (sort by badge name by default)
  * @param param0
  */
-const needToCheckDisplayNameSort = ({
-  firstName,
-  lastName,
-  badgeName,
-}: MemberNames) => {
+const needToCheckDisplayNameSort = ({ firstName, lastName, badgeName }: MemberNames) => {
   if (!badgeName) return false
   if (badgeName === fullName([firstName, lastName])) return false
   if (badgeName === fullName([lastName, firstName])) return false

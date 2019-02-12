@@ -57,14 +57,14 @@ describe('Member name handling', () => {
       expect(member.badgeName).to.equal('bazbaz')
     })
 
-    it('should create badge name from real name if not given', () => {
+    it('should not touch badge name if not given', () => {
       const before: MemberNames = {
         firstName: 'foo',
         lastName: 'bar',
         badgeName: null,
       }
       const member = updateNameData(before)
-      expect(member.badgeName).to.equal('foo bar')
+      expect(member.badgeName).to.equal(null)
     })
 
     it('should not modify original data', () => {
@@ -111,6 +111,26 @@ describe('Member name handling', () => {
       expect(member.displayNameSort).to.equal('bar foo')
       expect(member.checkDisplayNameSort).to.equal(false)
     })
+
+    it('should convert sort name from full name to lowercase', () => {
+      const before: MemberNames = {
+        firstName: 'Foo',
+        lastName: 'Bar',
+        badgeName: null,
+      }
+      const member = updateNameData(before)
+      expect(member.displayNameSort).to.equal('bar foo')
+    })
+
+    it('should convert sort name from badge name to lowercase', () => {
+      const before: MemberNames = {
+        firstName: 'Foo',
+        lastName: 'Bar',
+        badgeName: 'BaDgEr',
+      }
+      const member = updateNameData(before)
+      expect(member.displayNameSort).to.equal('badger')
+    })
   })
 
   describe('Full name sort value', () => {
@@ -132,6 +152,16 @@ describe('Member name handling', () => {
       }
       const member = updateNameData(originalMember)
       expect(member.fullNameSort).to.equal('foo')
+    })
+
+    it('should use lower case for sort name', () => {
+      const originalMember: MemberNames = {
+        firstName: 'Foo',
+        lastName: 'Bar',
+        badgeName: 'doesnotmatter',
+      }
+      const member = updateNameData(originalMember)
+      expect(member.fullNameSort).to.equal('bar foo')
     })
   })
 })
