@@ -4,6 +4,7 @@
     "lint": "tslint --project tsconfig.json",
     "build": "tsc",
     "deploy": "firebase deploy --only functions,firestore:rules",
+    "deploy:prod": "firebase use production && npm run deploy; firebase use default",
     "serve": "concurrently \"npm:watch\" \"firebase serve --only functions\"",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
