@@ -71,6 +71,9 @@ interface AppState {
 }
 
 class App extends React.Component<any, AppState> {
+  // this is to get rid of the "Cant perform a react state update on unMounted component" error on logout
+  private _isMounted = false
+
   constructor(props) {
     super(props)
     this.state = {
@@ -80,6 +83,7 @@ class App extends React.Component<any, AppState> {
 
   componentDidMount() {
     console.log('Hello from App!')
+    this._isMounted = true
     const auth = firebaseAuth()
     auth.onAuthStateChanged((user) => {
       if (user) {
@@ -95,11 +99,20 @@ class App extends React.Component<any, AppState> {
     })
   }
 
+  componentWillUnmount() {
+    this._isMounted = false
+  }
+
   isLoggedIn = () => this.state.user !== null
 
-  logout() {
-    const auth = firebaseAuth()
-    auth.signOut()
+  logout = () => {
+    if (this._isMounted) {
+      console.log('Logging out')
+      const auth = firebaseAuth()
+      auth.signOut()
+    } else {
+      console.error('Component not mounted - cannot log out')
+    }
   }
 
   render() {
