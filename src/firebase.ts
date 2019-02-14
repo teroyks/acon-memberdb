@@ -15,5 +15,6 @@ const firebaseAuth = firebase.auth
 const ui = new firebaseui.auth.AuthUI(firebaseAuth())
 
 const startFirebaseUI = (elementId: string) => ui.start(elementId, uiConfig)
+const stopFirebaseUI = () => ui.delete
 
-export { firebaseAuth, startFirebaseUI }
+export { firebaseAuth, startFirebaseUI, stopFirebaseUI }
