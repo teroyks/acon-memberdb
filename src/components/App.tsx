@@ -18,6 +18,12 @@ interface UserList {
   readonly [uid: string]: UserData
 }
 
+const noUser: UserData = {
+  uid: null,
+  name: null,
+  roles: [],
+}
+
 const users: UserList = {
   adminuser: {
     uid: 'foo',
@@ -74,7 +80,7 @@ class App extends React.Component<any, AppState> {
   constructor(props) {
     super(props)
     this.state = {
-      user: null,
+      user: noUser,
     }
   }
 
@@ -90,7 +96,7 @@ class App extends React.Component<any, AppState> {
         }
         this.setState({ user: currentUser })
       } else {
-        this.setState({ user: null })
+        this.setState({ user: noUser })
       }
     })
   }
@@ -99,7 +105,7 @@ class App extends React.Component<any, AppState> {
     stopFirebaseUI()
   }
 
-  isLoggedIn = () => this.state.user !== null
+  isLoggedIn = () => this.state.user.uid !== null
 
   logout = () => {
     console.log('Logging out')
@@ -108,6 +114,7 @@ class App extends React.Component<any, AppState> {
   }
 
   render() {
+    const { user } = this.state
     return (
       <BrowserRouter>
         <React.Fragment>
@@ -116,24 +123,20 @@ class App extends React.Component<any, AppState> {
             <Nav loggedIn={this.isLoggedIn()} logout={this.logout} />
           </header>
           <main>
-            {this.isLoggedIn() ? (
-              <div>
-                <AuthRouteWithProps
-                  exact
-                  path="/component"
-                  auth={this.state.user.roles.includes(Role.user)}
-                  component={AuthUser}
-                  componentProps={{ foo: 'foo', name: this.state.user.name }}
-                />
-                <AuthRouteWithProps
-                  exact
-                  path="/component"
-                  auth={this.state.user.roles.includes(Role.admin)}
-                  component={AuthUser}
-                  componentProps={{ admin: 'yes', name: 'A. Admin' }}
-                />
-              </div>
-            ) : null}
+            <AuthRouteWithProps
+              exact
+              path="/component"
+              auth={user.roles.includes(Role.user)}
+              component={AuthUser}
+              componentProps={{ foo: 'foo', name: user.name }}
+            />
+            <AuthRouteWithProps
+              exact
+              path="/component"
+              auth={user.roles.includes(Role.admin)}
+              component={AuthUser}
+              componentProps={{ admin: 'yes', name: 'A. Admin' }}
+            />
           </main>
         </React.Fragment>
       </BrowserRouter>
