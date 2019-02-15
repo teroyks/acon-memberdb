@@ -2,56 +2,17 @@ import * as React from 'react'
 import { BrowserRouter, Redirect } from 'react-router-dom'
 
 import * as firebase from '../firebase'
-
-enum Role {
-  admin = 'Administrator',
-  user = 'User',
-}
-
-type UserData = {
-  readonly uid: string
-  readonly name: string
-  readonly roles: Role[]
-}
-type UserList = {
-  readonly [uid: string]: UserData
-}
 import { AuthRoute } from './route-helper'
 import { Nav, UrlPath } from './SiteNav'
+import { Role, UserData, fetchUser } from './User'
 
+// default state value when not logged in
 const noUser: UserData = {
   uid: null,
   name: null,
   roles: [],
 }
 
-const users: UserList = {
-  adminuser: {
-    uid: 'foo',
-    name: 'Foo',
-    roles: [Role.admin, Role.user],
-  },
-  user: {
-    uid: 'bar',
-    name: 'Bar',
-    roles: [Role.user],
-  },
-  admin: {
-    uid: 'boo',
-    name: 'I am an admin',
-    roles: [Role.admin],
-  },
-  none: {
-    uid: 'none',
-    name: 'Baz',
-    roles: [],
-  },
-}
-
-const AuthUser = ({ name }) => {
-  console.log('AuthUser', name)
-  return <div>AuthUser {name}</div>
-}
 type AppState = {
   user: UserData
 }
@@ -72,12 +33,15 @@ class App extends React.Component<any, AppState> {
     const auth = firebase.auth()
     auth.onAuthStateChanged((user) => {
       if (user) {
-        const currentUser: UserData = {
-          uid: user.uid,
-          name: user.displayName,
-          roles: [Role.user, Role.admin],
+        console.log('logged-in user: ', user.uid)
+        const queryResult = fetchUser(user.uid)
+        if (queryResult.valid) {
+          console.log('current user:', queryResult.user)
+          this.setState({ user: queryResult.user })
+        } else {
+          // Logged in user not found in db
+          console.error('Invalid user')
         }
-        this.setState({ user: currentUser })
       } else {
         this.setState({ user: noUser })
       }
