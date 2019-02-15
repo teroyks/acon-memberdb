@@ -1,9 +1,9 @@
 import * as React from 'react'
-import { firebaseAuth, startFirebaseUI } from '../firebase'
+import * as firebase from '../firebase'
 
 class Login extends React.Component {
   componentDidMount() {
-    startFirebaseUI('#firebaseui')
+    firebase.startUI('#firebaseui')
   }
 
   render() {

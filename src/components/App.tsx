@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { BrowserRouter, NavLink, Redirect } from 'react-router-dom'
 
-import { firebaseAuth, stopFirebaseUI } from '../firebase'
+import * as firebase from '../firebase'
 import { AuthRouteWithProps } from './route-helper'
 
 enum Role {
@@ -89,7 +89,7 @@ class App extends React.Component<any, AppState> {
 
   componentDidMount() {
     console.log('Hello from App!')
-    const auth = firebaseAuth()
+    const auth = firebase.auth()
     auth.onAuthStateChanged((user) => {
       if (user) {
         const currentUser: UserData = {
@@ -105,14 +105,14 @@ class App extends React.Component<any, AppState> {
   }
 
   componentWillUnmount() {
-    stopFirebaseUI()
+    firebase.stopUI()
   }
 
   isLoggedIn = () => this.state.user.uid !== null
 
   logout = () => {
     console.log('Logging out')
-    const auth = firebaseAuth()
+    const auth = firebase.auth()
     auth.signOut()
     if (this) this.logoutRedirect = true // redirect browser to main URL
   }

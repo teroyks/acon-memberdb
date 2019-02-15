@@ -11,10 +11,10 @@ const uiConfig = {
 
 firebase.initializeApp(devConfig)
 
-const firebaseAuth = firebase.auth
-const ui = new firebaseui.auth.AuthUI(firebaseAuth())
+const auth = firebase.auth
+const ui = new firebaseui.auth.AuthUI(auth())
 
-const startFirebaseUI = (elementId: string) => ui.start(elementId, uiConfig)
-const stopFirebaseUI = () => ui.delete
+const startUI = (elementId: string) => ui.start(elementId, uiConfig)
+const stopUI = () => ui.delete
 
-export { firebaseAuth, startFirebaseUI, stopFirebaseUI }
+export { auth, startUI, stopUI }
