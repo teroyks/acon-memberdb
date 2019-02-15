@@ -3,6 +3,7 @@ import { createdAtTimestamp, modifiedAtTimestamp } from './document-timestamp'
 import * as store from './firestore'
 import { MemberNames, namesHaveChanged, updateNameData } from './member'
 import List, * as membersList from './memberslist'
+import { UserData } from './user'
 
 /**
  * Add a timestamp to every new purchase record.
@@ -80,3 +81,12 @@ export const listMembers = functions.https.onRequest(async (req, res) => {
     res.status(500).send('Internal Server Error')
   }
 })
+
+const newUser = (uid: string, name: string = 'Unknown'): UserData => ({ uid, name, roles: [] })
+
+/**
+ * Create user record for authenticated users
+ */
+export const addNewUser = functions.auth
+  .user()
+  .onCreate(({ uid, displayName }) => store.addUser(newUser(uid, displayName)))

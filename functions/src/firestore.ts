@@ -1,8 +1,9 @@
 /**
- * Fetch data from Firestore
+ * Handle Firestore data fetch and write.
  */
 
 import * as admin from 'firebase-admin'
+import { UserData } from './user'
 
 admin.initializeApp()
 const store = admin.firestore()
@@ -32,4 +33,17 @@ const fetchUpdateDate = async (): Promise<Date | null> => {
   return data ? data.importedAt.toDate() : null
 }
 
-export { fetchMembers, fetchUpdateDate }
+/**
+ * Add member db user.
+ * Existing user with the same uid will be overwritten.
+ * @param user User data
+ * @returns Write result promise
+ */
+const addUser = (user: UserData) =>
+  store
+    .collection('/users')
+    .doc(user.uid)
+    .set(user)
+
+export { addUser, fetchMembers, fetchUpdateDate }
+// export { fetchMembers, fetchUpdateDate }
