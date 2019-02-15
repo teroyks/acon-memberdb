@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { BrowserRouter, NavLink } from 'react-router-dom'
+import { BrowserRouter, NavLink, Redirect } from 'react-router-dom'
 
 import { firebaseAuth, stopFirebaseUI } from '../firebase'
 import { AuthRouteWithProps } from './route-helper'
@@ -77,6 +77,9 @@ type AppState = {
 }
 
 class App extends React.Component<any, AppState> {
+  // should the browser be redirected to the main URL
+  private logoutRedirect = false
+
   constructor(props) {
     super(props)
     this.state = {
@@ -111,9 +114,15 @@ class App extends React.Component<any, AppState> {
     console.log('Logging out')
     const auth = firebaseAuth()
     auth.signOut()
+    if (this) this.logoutRedirect = true // redirect browser to main URL
   }
 
   render() {
+    if (this.logoutRedirect) {
+      this.logoutRedirect = false
+      return <Redirect to="/" />
+    }
+
     const { user } = this.state
     return (
       <BrowserRouter>
