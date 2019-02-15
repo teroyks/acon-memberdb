@@ -45,5 +45,10 @@ const addUser = (user: UserData) =>
     .doc(user.uid)
     .set(user)
 
-export { addUser, fetchMembers, fetchUpdateDate }
-// export { fetchMembers, fetchUpdateDate }
+const deleteUser = (uid: string) =>
+  store
+    .collection('/users')
+    .doc(uid)
+    .delete()
+
+export { addUser, deleteUser, fetchMembers, fetchUpdateDate }

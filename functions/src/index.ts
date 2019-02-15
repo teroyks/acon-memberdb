@@ -85,8 +85,13 @@ export const listMembers = functions.https.onRequest(async (req, res) => {
 const newUser = (uid: string, name: string = 'Unknown'): UserData => ({ uid, name, roles: [] })
 
 /**
- * Create user record for authenticated users
+ * Create user record for authenticated users.
  */
-export const addNewUser = functions.auth
+export const addUser = functions.auth
   .user()
   .onCreate(({ uid, displayName }) => store.addUser(newUser(uid, displayName)))
+
+/**
+ * Delete store data when user auth account is deleted.
+ */
+export const deleteUser = functions.auth.user().onDelete(({ uid }) => store.deleteUser(uid))
