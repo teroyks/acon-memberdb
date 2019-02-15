@@ -1,8 +1,7 @@
 import * as React from 'react'
-import { BrowserRouter, NavLink, Redirect } from 'react-router-dom'
+import { BrowserRouter, Redirect } from 'react-router-dom'
 
 import * as firebase from '../firebase'
-import { AuthRouteWithProps } from './route-helper'
 
 enum Role {
   admin = 'Administrator',
@@ -17,6 +16,8 @@ type UserData = {
 type UserList = {
   readonly [uid: string]: UserData
 }
+import { AuthRoute } from './route-helper'
+import { Nav, UrlPath } from './SiteNav'
 
 const noUser: UserData = {
   uid: null,
@@ -51,27 +52,6 @@ const AuthUser = ({ name }) => {
   console.log('AuthUser', name)
   return <div>AuthUser {name}</div>
 }
-
-const notLoggedInMessage = () => <a href="/login">Log in</a>
-
-class Nav extends React.Component<{ loggedIn: boolean; logout: React.MouseEventHandler }, {}> {
-  render() {
-    console.log('Nav', this.props)
-    return this.props.loggedIn ? (
-      <nav>
-        <NavLink to="/">Home</NavLink>
-        <NavLink to="/main">Main</NavLink>
-        <NavLink to="/auth">Auth</NavLink>
-        <NavLink to="/user">User</NavLink>
-        <NavLink to="/component">Auth-component</NavLink>
-        <button onClick={this.props.logout}>Logout</button>
-      </nav>
-    ) : (
-      <nav>{notLoggedInMessage()}</nav>
-    )
-  }
-}
-
 type AppState = {
   user: UserData
 }
@@ -132,19 +112,23 @@ class App extends React.Component<any, AppState> {
             <Nav loggedIn={this.isLoggedIn()} logout={this.logout} />
           </header>
           <main>
-            <AuthRouteWithProps
+            <AuthRoute
               exact
-              path="/component"
+              path={UrlPath.reports}
               auth={user.roles.includes(Role.user)}
-              component={AuthUser}
-              componentProps={{ foo: 'foo', name: user.name }}
+              component={Report}
             />
-            <AuthRouteWithProps
+            <AuthRoute
               exact
-              path="/component"
-              auth={user.roles.includes(Role.admin)}
-              component={AuthUser}
-              componentProps={{ admin: 'yes', name: 'A. Admin' }}
+              path={UrlPath.membersList}
+              auth={user.roles.includes(Role.user)}
+              component={MembersList}
+            />
+            <AuthRoute
+              exact
+              path={UrlPath.home}
+              auth={user.roles.includes(Role.editor)}
+              component={MemberSearchForm}
             />
           </main>
         </React.Fragment>
@@ -154,3 +138,21 @@ class App extends React.Component<any, AppState> {
 }
 
 export default App
+
+class MemberSearchForm extends React.Component {
+  render() {
+    return <section>Member search form</section>
+  }
+}
+
+class Report extends React.Component {
+  render() {
+    return <div>Reports index</div>
+  }
+}
+
+class MembersList extends React.Component {
+  render() {
+    return <div>Members list</div>
+  }
+}
