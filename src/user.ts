@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 enum Role {
   admin = 'Administrator', // can manage other users
   editor = 'Editor', // can edit member data

@@ -4,7 +4,7 @@ import { BrowserRouter, Redirect } from 'react-router-dom'
 import * as firebase from '../firebase'
 import { AuthRoute } from './route-helper'
 import { Nav, UrlPath } from './SiteNav'
-import { Role, UserData, fetchUser } from './User'
+import { Role, UserData, fetchUser } from '../user'
 
 // default state value when not logged in
 const noUser: UserData = {
