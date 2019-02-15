@@ -14,7 +14,7 @@ type UserData = {
   readonly name: string
   readonly roles: Role[]
 }
-interface UserList {
+type UserList = {
   readonly [uid: string]: UserData
 }
 
@@ -72,7 +72,7 @@ class Nav extends React.Component<{ loggedIn: boolean; logout: React.MouseEventH
   }
 }
 
-interface AppState {
+type AppState = {
   user: UserData
 }
 

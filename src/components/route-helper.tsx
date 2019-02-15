@@ -2,13 +2,13 @@ import * as React from 'react'
 import { Route } from 'react-router-dom'
 
 // Properties passed to RouteWithProps
-interface RouteProps {
+type RouteProps = {
   component: any // rendered component
   componentProps?: any // properties passed to the component
   [propName: string]: any // route properties
 }
 // Properties passed to AuthRoute
-interface AuthRouteProps {
+type AuthRouteProps = {
   component: any // rendered component
   auth: boolean // tells if the component should be rendered
   [propName: string]: any // route properties
