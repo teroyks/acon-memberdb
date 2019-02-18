@@ -19,7 +19,7 @@ const fetchMembers = async () => {
     .orderBy('displayNameSort')
     .get()
 
-  return querySnapshot.docs.map((doc) => doc.data())
+  return querySnapshot.docs.map(doc => doc.data())
 }
 
 /**

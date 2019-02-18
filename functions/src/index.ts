@@ -10,14 +10,14 @@ import { UserData } from './common/user'
  */
 export const addTimestampToNewPurchase = functions.firestore
   .document('purchases/{purchaseId}')
-  .onCreate((snapshot) => snapshot.ref.set(createdAtTimestamp(), { merge: true }))
+  .onCreate(snapshot => snapshot.ref.set(createdAtTimestamp(), { merge: true }))
 
 /**
  * Update generated names and add 'createdAt' timestamp to new member records.
  */
 export const addNewMember = functions.firestore
   .document('members/{memberId}')
-  .onCreate((snapshot) => {
+  .onCreate(snapshot => {
     const memberData = snapshot.data() as MemberNames
     console.log(`New member added: ${memberData.firstName} ${memberData.lastName}`)
     const memberWithUpdatedNameData = updateNameData(memberData)
@@ -35,7 +35,7 @@ export const addNewMember = functions.firestore
  */
 export const updateMember = functions.firestore
   .document('members/{memberId}')
-  .onUpdate(async (change) => {
+  .onUpdate(async change => {
     const oldMemberData = change.before
       ? (change.before.data() as MemberNames)
       : ({} as MemberNames)
