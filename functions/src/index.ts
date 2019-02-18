@@ -72,6 +72,7 @@ export const updateMember = functions.firestore
 export const listMembers = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
     res.setHeader('content-type', 'text/plain')
+    res.set('Cache-Control', 'public, max-age=900')
     try {
       const membersPromise = store.fetchMembers() as Promise<membersList.memberData[]>
       const [allMembers, importedAt] = await Promise.all([membersPromise, store.fetchUpdateDate()])
