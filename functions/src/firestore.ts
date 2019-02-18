@@ -3,7 +3,7 @@
  */
 
 import * as admin from 'firebase-admin'
-import { UserData } from './user'
+import { UserData } from './common/user'
 
 admin.initializeApp()
 const store = admin.firestore()

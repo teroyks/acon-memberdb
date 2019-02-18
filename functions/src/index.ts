@@ -3,7 +3,7 @@ import { createdAtTimestamp, modifiedAtTimestamp } from './document-timestamp'
 import * as store from './firestore'
 import { MemberNames, namesHaveChanged, updateNameData } from './member'
 import List, * as membersList from './memberslist'
-import { UserData } from './user'
+import { UserData } from './common/user'
 
 /**
  * Add a timestamp to every new purchase record.

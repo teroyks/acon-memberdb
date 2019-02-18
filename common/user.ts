@@ -1,3 +1,7 @@
+/**
+ * Handles authenticated users.
+ */
+
 enum Role {
   admin = 'Administrator', // can manage other users
   editor = 'Editor', // can edit member data
@@ -50,4 +54,4 @@ const users: UserList = {
 const fetchUser = (uid: string): UserResult =>
   users[uid] ? { valid: true, user: users[uid] } : { valid: false }
 
-export { Role, UserData, fetchUser }
+export { Role, UserData, UserResult, fetchUser }
