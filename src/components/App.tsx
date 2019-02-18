@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { BrowserRouter, Redirect } from 'react-router-dom'
+import { BrowserRouter, Redirect, Route } from 'react-router-dom'
 
 import * as firebase from '../firebase'
 import { AuthRoute } from './route-helper'
@@ -15,6 +15,8 @@ const noUser: UserData = {
 }
 
 type AppState = {
+  loadingUser: boolean
+  loggedIn: boolean
   user: UserData
 }
 
@@ -25,6 +27,8 @@ class App extends React.Component<any, AppState> {
   constructor(props) {
     super(props)
     this.state = {
+      loadingUser: false,
+      loggedIn: false,
       user: noUser,
     }
   }
@@ -33,7 +37,9 @@ class App extends React.Component<any, AppState> {
     console.log('Hello from App!')
     const auth = firebase.auth()
     auth.onAuthStateChanged(async user => {
+      this.setState({ loadingUser: true })
       if (user) {
+        this.setState({ loggedIn: true })
         console.log('logged-in user: ', user.uid)
         const queryResult = await fetchUser(user.uid)
         if (queryResult.valid) {
@@ -41,11 +47,13 @@ class App extends React.Component<any, AppState> {
           this.setState({ user: queryResult.user })
         } else {
           // Logged in user not found in db
+          this.setState({ loggedIn: false })
           console.error('Invalid user')
         }
       } else {
-        this.setState({ user: noUser })
+        this.setState({ loggedIn: false, user: noUser })
       }
+      this.setState({ loadingUser: false })
     })
   }
 
@@ -53,7 +61,8 @@ class App extends React.Component<any, AppState> {
     firebase.stopUI()
   }
 
-  isLoggedIn = () => this.state.user.uid !== null
+  isLoggedIn = () => this.state.loggedIn
+  isLoadingUser = () => this.state.loadingUser
 
   logout = () => {
     console.log('Logging out')
@@ -95,6 +104,16 @@ class App extends React.Component<any, AppState> {
               auth={user.roles.includes(Role.editor)}
               component={MemberSearchForm}
             />
+            <Route
+              render={() => (
+                <NewUserMessage
+                  hasUser={!this.isLoadingUser() && this.isLoggedIn()}
+                  roles={user.roles}
+                />
+              )}
+            />
+            <Route render={() => <LoadingMessage loading={this.isLoadingUser()} />} />
+            <Route render={() => <LoginMessage loggedIn={this.isLoggedIn()} />} />
           </main>
         </React.Fragment>
       </BrowserRouter>
@@ -121,3 +140,22 @@ class MembersList extends React.Component {
     return <div>Members list</div>
   }
 }
+
+/**
+ * Message to show users with no roles assigned to them.
+ * @param param0
+ */
+const NewUserMessage: React.SFC<{ hasUser: boolean; roles: Role[] }> = ({ hasUser, roles }) =>
+  hasUser && roles.length === 0 ? (
+    <p>Welcome! Login successful – ask the administrator to add some permissions for you.</p>
+  ) : null
+
+const LoadingMessage: React.SFC<{ loading: boolean }> = ({ loading }) =>
+  loading ? <div>Loading…</div> : null
+
+const LoginMessage: React.SFC<{ loggedIn: boolean }> = ({ loggedIn }) =>
+  loggedIn ? null : (
+    <div>
+      <a href="/login">Log in</a> to use the app
+    </div>
+  )

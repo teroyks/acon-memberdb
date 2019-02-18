@@ -24,7 +24,7 @@ class Nav extends React.Component<{ loggedIn: boolean; logout: React.MouseEventH
         <button onClick={this.props.logout}>Logout</button>
       </nav>
     ) : (
-      <nav>{notLoggedInMessage()}</nav>
+      <nav />
     )
   }
 }
