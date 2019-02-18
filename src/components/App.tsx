@@ -5,6 +5,7 @@ import * as firebase from '../firebase'
 import { AuthRoute } from './route-helper'
 import { Nav, UrlPath } from './SiteNav'
 import { Role, UserData } from '../common/user'
+import { fetchUser } from '../firestore'
 
 // default state value when not logged in
 const noUser: UserData = {
@@ -31,10 +32,10 @@ class App extends React.Component<any, AppState> {
   componentDidMount() {
     console.log('Hello from App!')
     const auth = firebase.auth()
-    auth.onAuthStateChanged((user) => {
+    auth.onAuthStateChanged(async user => {
       if (user) {
         console.log('logged-in user: ', user.uid)
-        const queryResult = fetchUser(user.uid)
+        const queryResult = await fetchUser(user.uid)
         if (queryResult.valid) {
           console.log('current user:', queryResult.user)
           this.setState({ user: queryResult.user })
