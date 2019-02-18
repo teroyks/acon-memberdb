@@ -4,6 +4,9 @@ import * as store from './firestore'
 import { MemberNames, namesHaveChanged, updateNameData } from './member'
 import List, * as membersList from './memberslist'
 import { UserData } from './common/user'
+import * as Cors from 'cors'
+
+const cors = Cors({ origin: true })
 
 /**
  * Add a timestamp to every new purchase record.
@@ -66,20 +69,22 @@ export const updateMember = functions.firestore
 /**
  * Fetch formatted members list for the website
  */
-export const listMembers = functions.https.onRequest(async (req, res) => {
-  res.setHeader('content-type', 'text/plain')
-  try {
-    const membersPromise = store.fetchMembers() as Promise<membersList.memberData[]>
-    const [allMembers, importedAt] = await Promise.all([membersPromise, store.fetchUpdateDate()])
-    const members = new List(allMembers)
+export const listMembers = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    res.setHeader('content-type', 'text/plain')
+    try {
+      const membersPromise = store.fetchMembers() as Promise<membersList.memberData[]>
+      const [allMembers, importedAt] = await Promise.all([membersPromise, store.fetchUpdateDate()])
+      const members = new List(allMembers)
 
-    const updateMessage = `Updated on ${importedAt ? importedAt.toDateString() : 'Unknown'}`
-    res.send(members.toMarkdown() + '\n\n' + updateMessage)
-  } catch (err) {
-    console.error('Could not fetch members list')
-    console.error(err)
-    res.status(500).send('Internal Server Error')
-  }
+      const updateMessage = `Updated on ${importedAt ? importedAt.toDateString() : 'Unknown'}`
+      res.send(members.toMarkdown() + '\n\n' + updateMessage)
+    } catch (err) {
+      console.error('Could not fetch members list')
+      console.error(err)
+      res.status(500).send('Internal Server Error')
+    }
+  })
 })
 
 const newUser = (uid: string, name: string = 'Unknown'): UserData => ({ uid, name, roles: [] })
