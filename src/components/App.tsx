@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { BrowserRouter, Redirect, Route } from 'react-router-dom'
-
+import { Role, UserData } from '../common/user'
 import * as firebase from '../firebase'
+import { fetchUser } from '../firestore'
+import MembersList from './MembersList'
 import { AuthRoute } from './route-helper'
 import { Nav, UrlPath } from './SiteNav'
-import { Role, UserData } from '../common/user'
-import { fetchUser } from '../firestore'
 
 // default state value when not logged in
 const noUser: UserData = {
@@ -132,12 +132,6 @@ class MemberSearchForm extends React.Component {
 class Report extends React.Component {
   render() {
     return <div>Reports index</div>
-  }
-}
-
-class MembersList extends React.Component {
-  render() {
-    return <div>Members list</div>
   }
 }
 
