@@ -3,8 +3,7 @@ import { membersListURL } from '../config/app.config'
 
 const fetchData = async () => {
   if (!membersListURL) {
-    console.error('membersListURL not defined in config')
-    throw Error
+    throw Error('membersListURL not defined in config')
   }
   const res = await fetch(membersListURL)
   return await res.text()
@@ -19,6 +18,7 @@ class MembersList extends React.Component {
         this.setState({ data })
       })
       .catch(err => {
+        console.error(err.message)
         this.setState({ data: 'Failed to retrieve list' })
       })
   }
