@@ -19,7 +19,7 @@ service cloud.firestore {
     }
     
     match /members/{memberId} {
-	    allow read: if userHasAnyRole(['Administrator', 'Editor', 'User']);
+	    allow read: if userHasAnyRole(['Editor', 'User']);
   	  allow write: if false;
     }
     
