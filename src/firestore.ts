@@ -1,8 +1,8 @@
 /**
  * Firestore database
  */
+import { UserData, UserResult } from './common/user'
 import { db } from './firebase'
-import { UserResult, UserData } from './common/user'
 
 /**
  * Fetches the user from database.
