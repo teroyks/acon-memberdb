@@ -1,0 +1,27 @@
+{
+  "extends": "tslint:latest",
+  "rules": {
+    "arrow-parens": false,
+    "await-promise": true,
+    "curly": false,
+    "interface-over-type-literal": false,
+    "max-classes-per-file": false,
+    "member-access": false,
+    "no-console": false,
+    "no-floating-promises": true,
+    "prefer-template": true,
+    "quotemark": { "options": "single" },
+    "semicolon": { "options": "never" },
+    "trailing-comma": {
+      "options": {
+        "esSpecCompliant": true,
+        "multiline": {
+          "objects": "always",
+          "arrays": "always",
+          "functions": "never",
+          "typeLiterals": "ignore"
+        }
+      }
+    }
+  }
+}
