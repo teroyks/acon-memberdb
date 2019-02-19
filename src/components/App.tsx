@@ -139,15 +139,18 @@ class Report extends React.Component {
  * Message to show users with no roles assigned to them.
  * @param param0
  */
-const NewUserMessage: React.SFC<{ hasUser: boolean; roles: Role[] }> = ({ hasUser, roles }) =>
+const NewUserMessage: React.FunctionComponent<{ hasUser: boolean; roles: Role[] }> = ({
+  hasUser,
+  roles,
+}) =>
   hasUser && roles.length === 0 ? (
     <p>Welcome! Login successful – ask the administrator to add some permissions for you.</p>
   ) : null
 
-const LoadingMessage: React.SFC<{ loading: boolean }> = ({ loading }) =>
+const LoadingMessage: React.FunctionComponent<{ loading: boolean }> = ({ loading }) =>
   loading ? <div>Loading…</div> : null
 
-const LoginMessage: React.SFC<{ loggedIn: boolean }> = ({ loggedIn }) =>
+const LoginMessage: React.FunctionComponent<{ loggedIn: boolean }> = ({ loggedIn }) =>
   loggedIn ? null : (
     <div>
       <a href='/login'>Log in</a> to use the app
