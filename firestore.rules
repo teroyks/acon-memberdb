@@ -1,8 +1,26 @@
 service cloud.firestore {
   match /databases/{database}/documents {
+
+		function getUserData() {
+    	return get(/databases/$(database)/documents/users/$(request.auth.uid)).data
+    }
+    
+    function userHasRole(role) {
+    	return role in getUserData().roles
+    }
+    
+    function userHasAnyRole(roles) {
+    	return getUserData().roles.hasAny(roles)
+    }
+    
   	match /users/{userId} {
     	allow read: if request.auth.uid == userId;
       allow write: if false;
+    }
+    
+    match /members/{memberId} {
+	    allow read: if userHasAnyRole(['Administrator', 'Editor', 'User']);
+  	  allow write: if false;
     }
     
     match /{document=**} {
