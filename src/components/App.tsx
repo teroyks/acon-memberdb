@@ -4,6 +4,7 @@ import { Role, UserData } from '../common/user'
 import * as firebase from '../firebase'
 import { fetchUser } from '../firestore'
 import MembersList from './MembersList'
+import MembersToCheck from './MembersToCheck'
 import { AuthRoute } from './route-helper'
 import { Nav, UrlPath } from './SiteNav'
 
@@ -104,6 +105,13 @@ class App extends React.Component<any, AppState> {
               auth={user.roles.includes(Role.editor)}
               component={MemberSearchForm}
             />
+            <AuthRoute
+              exact
+              path={UrlPath.home}
+              auth={user.roles.includes(Role.editor)}
+              component={MembersToCheck}
+            />
+
             <Route
               render={() => (
                 <NewUserMessage
