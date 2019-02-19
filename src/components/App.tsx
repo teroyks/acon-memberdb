@@ -9,9 +9,9 @@ import { Nav, UrlPath } from './SiteNav'
 
 // default state value when not logged in
 const noUser: UserData = {
-  uid: null,
   name: null,
   roles: [],
+  uid: null,
 }
 
 type AppState = {
@@ -64,17 +64,17 @@ class App extends React.Component<any, AppState> {
   isLoggedIn = () => this.state.loggedIn
   isLoadingUser = () => this.state.loadingUser
 
-  logout = () => {
+  logout = async () => {
     console.log('Logging out')
     const auth = firebase.auth()
-    auth.signOut()
+    await auth.signOut()
     if (this) this.logoutRedirect = true // redirect browser to main URL
   }
 
   render() {
     if (this.logoutRedirect) {
       this.logoutRedirect = false
-      return <Redirect to="/" />
+      return <Redirect to='/' />
     }
 
     const { user } = this.state
@@ -82,7 +82,7 @@ class App extends React.Component<any, AppState> {
       <BrowserRouter>
         <React.Fragment>
           <header>
-            <div title="Åcon Member DB">ÅMDB</div>
+            <div title='Åcon Member DB'>ÅMDB</div>
             <Nav loggedIn={this.isLoggedIn()} logout={this.logout} />
           </header>
           <main>
@@ -150,6 +150,6 @@ const LoadingMessage: React.SFC<{ loading: boolean }> = ({ loading }) =>
 const LoginMessage: React.SFC<{ loggedIn: boolean }> = ({ loggedIn }) =>
   loggedIn ? null : (
     <div>
-      <a href="/login">Log in</a> to use the app
+      <a href='/login'>Log in</a> to use the app
     </div>
   )
