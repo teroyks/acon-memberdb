@@ -3,6 +3,7 @@ import { BrowserRouter, Redirect, Route } from 'react-router-dom'
 import { Role, UserData } from '../common/user'
 import * as firebase from '../firebase'
 import { fetchUser } from '../firestore'
+import MemberForm from './MemberEditor'
 import MembersList from './MembersList'
 import MembersToCheck from './MembersToCheck'
 import { AuthRoute } from './route-helper'
@@ -98,6 +99,12 @@ class App extends React.Component<any, AppState> {
               path={UrlPath.membersList}
               auth={user.roles.includes(Role.user)}
               component={MembersList}
+            />
+            <AuthRoute
+              exact
+              path={UrlPath.member}
+              auth={user.roles.includes(Role.editor)}
+              component={MemberForm}
             />
             <AuthRoute
               exact

@@ -8,6 +8,7 @@ import { NavLink } from 'react-router-dom'
 enum UrlPath {
   home = '/',
   reports = '/reports',
+  member = '/member',
   membersList = '/membersList',
 }
 
