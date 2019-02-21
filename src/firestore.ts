@@ -26,6 +26,8 @@ const props = {
   },
 }
 
+const membersRef = db.collection(Coll.members)
+
 /**
  * Fetches the user from database.
  * @param uid Logged-in user id
@@ -39,6 +41,6 @@ const fetchUser = (uid: string): Promise<UserResult> =>
     .then(doc => (doc.exists ? { valid: true, user: doc.data() as UserData } : { valid: false }))
 
 const fetchCheckSortNameMembers = () =>
-  db.collection(Coll.members).where(props.member.checkDisplayNameSort, '==', true)
+  membersRef.where(props.member.checkDisplayNameSort, '==', true)
 
-export { MemberData, fetchCheckSortNameMembers, fetchUser, props }
+export { MemberData, fetchCheckSortNameMembers, fetchUser, membersRef, props }
