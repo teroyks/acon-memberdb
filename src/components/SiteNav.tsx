@@ -12,8 +12,6 @@ enum UrlPath {
   membersList = '/membersList',
 }
 
-const notLoggedInMessage = () => <a href="/login">Log in</a>
-
 class Nav extends React.Component<{ loggedIn: boolean; logout: React.MouseEventHandler }, {}> {
   render() {
     console.log('Nav', this.props)
