@@ -2,7 +2,7 @@
  * Member record-related functions
  */
 
-const fullName = (names: string[]) => names.join(' ').trim()
+const formName = (names: string[]) => names.join(' ').trim()
 
 /**
  * Member object fields.
@@ -20,14 +20,20 @@ interface MemberNames {
  * @param param0 member name fields
  */
 const displayName = ({ firstName, lastName, badgeName }: MemberNames) =>
-  badgeName ? badgeName : fullName([firstName, lastName])
+  badgeName ? badgeName : formName([firstName, lastName])
+
+/**
+ * Construct a full name
+ * @param param0 member name object
+ */
+const fullName = ({ firstName, lastName }: MemberNames) => formName([firstName, lastName])
 
 /**
  * Constructs real name for sorting
  * @param param0
  */
 const fullNameSort = ({ firstName, lastName }: MemberNames) =>
-  fullName([lastName, firstName]).toLowerCase()
+  formName([lastName, firstName]).toLowerCase()
 
 /**
  * Construct a name for sorting by display name
@@ -35,7 +41,7 @@ const fullNameSort = ({ firstName, lastName }: MemberNames) =>
  */
 const displayNameSort = ({ firstName, lastName, badgeName }: MemberNames) =>
   badgeName
-    ? badgeName.toLowerCase() === fullName([firstName, lastName]).toLowerCase()
+    ? badgeName.toLowerCase() === formName([firstName, lastName]).toLowerCase()
       ? fullNameSort({ firstName, lastName, badgeName: null })
       : badgeName.toLowerCase()
     : fullNameSort({ firstName, lastName, badgeName })
@@ -61,20 +67,22 @@ const namesHaveChanged = (oldNames: MemberNames, newNames: MemberNames) =>
  */
 const needToCheckDisplayNameSort = ({ firstName, lastName, badgeName }: MemberNames) => {
   if (!badgeName) return false
-  if (badgeName === fullName([firstName, lastName])) return false
-  if (badgeName === fullName([lastName, firstName])) return false
+  if (badgeName === formName([firstName, lastName])) return false
+  if (badgeName === formName([lastName, firstName])) return false
 
   return true
 }
 
 const updateNameData = (memberData: any) => {
-  const updatedMember = Object.assign({}, memberData)
+  const updatedMember = { ...memberData }
 
   updatedMember.displayName = displayName(memberData)
   updatedMember.displayNameSort = displayNameSort(memberData)
   updatedMember.checkDisplayNameSort = needToCheckDisplayNameSort(memberData)
 
   updatedMember.fullNameSort = fullNameSort(memberData)
+
+  updatedMember.fullName = fullName(memberData)
 
   return updatedMember
 }

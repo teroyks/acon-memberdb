@@ -164,4 +164,16 @@ describe('Member name handling', () => {
       expect(member.fullNameSort).to.equal('bar foo')
     })
   })
+
+  describe('Full name', () => {
+    it('should add a full name field', () => {
+      const originalMember: MemberNames = {
+        firstName: 'Foo',
+        lastName: 'Bar',
+        badgeName: 'Ignore this',
+      }
+      const member =updateNameData(originalMember)
+      expect(member.fullName).to.equal('Foo Bar')
+    })
+  })
 })
