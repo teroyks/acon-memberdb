@@ -18,6 +18,12 @@ In `functions`.
 - `npm test`: run module tests
 - `npm run test:watch`: continuously run tests on save
 
+## Prerequisites
+
+- node
+- following global node packages:
+  - `parcel-bundler`
+
 ## Installation
 
 - `firebase init`
