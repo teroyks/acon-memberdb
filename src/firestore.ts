@@ -17,12 +17,22 @@ type MemberData = {
   lastName: string
 }
 
+type ProgramParticipantData = {
+  fullName: string
+  displayName: string
+  email: string
+  participateProgram: boolean
+  participateProgramAnswer: string
+}
+
 // database document property names
 const props = {
   member: {
     checkDisplayNameSort: 'checkDisplayNameSort',
     firstName: 'firstName',
     lastName: 'lastName',
+    participateProgram: 'participateProgram',
+    participateProgramAnswer: 'participateProgramAnswer',
   },
 }
 
@@ -43,4 +53,31 @@ const fetchUser = (uid: string): Promise<UserResult> =>
 const fetchCheckSortNameMembers = () =>
   membersRef.where(props.member.checkDisplayNameSort, '==', true)
 
-export { MemberData, fetchCheckSortNameMembers, fetchUser, membersRef, props }
+const _fetchParticipantsOfType = async matchVal => {
+  const querySnapshot = await membersRef
+    .where(props.member.participateProgram, '==', matchVal)
+    .get()
+  const participants: ProgramParticipantData[] = []
+  querySnapshot.forEach(docSnapshot => {
+    participants.push(docSnapshot.data() as ProgramParticipantData)
+  })
+  return participants
+}
+
+const fetchProgramParticipants = async () => {
+  const [sure, perhaps] = await Promise.all([
+    _fetchParticipantsOfType(true),
+    _fetchParticipantsOfType(null),
+  ])
+  return [...sure, ...perhaps]
+}
+
+export {
+  MemberData,
+  ProgramParticipantData,
+  fetchCheckSortNameMembers,
+  fetchProgramParticipants,
+  fetchUser,
+  membersRef,
+  props,
+}

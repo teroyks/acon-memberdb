@@ -6,6 +6,7 @@ import { fetchUser } from '../firestore'
 import MemberForm from './MemberEditor'
 import MembersList from './MembersList'
 import MembersToCheck from './MembersToCheck'
+import ProgramParticipants from './ProgramParticipants'
 import { AuthRoute } from './route-helper'
 import { Nav, UrlPath } from './SiteNav'
 
@@ -93,6 +94,12 @@ class App extends React.Component<any, AppState> {
               path={UrlPath.reports}
               auth={user.roles.includes(Role.user)}
               component={Report}
+            />
+            <AuthRoute
+              exact
+              path={UrlPath.progParticipants}
+              auth={user.roles.includes(Role.user)}
+              component={ProgramParticipants}
             />
             <AuthRoute
               exact
