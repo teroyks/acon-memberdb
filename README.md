@@ -23,6 +23,9 @@ In `functions`.
 - node
 - following global node packages:
   - `parcel-bundler`
+  - `typescript`
+  - `firebase`
+  - `firebase-tools`
 
 ## Installation
 
