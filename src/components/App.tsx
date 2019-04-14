@@ -73,7 +73,7 @@ class App extends React.Component<any, AppState> {
     if (this) this.logoutRedirect = true // redirect browser to main URL
   }
 
-  render() {
+  render(): JSX.Element {
     if (this.logoutRedirect) {
       this.logoutRedirect = false
       return <Redirect to='/' />
@@ -144,20 +144,21 @@ class MemberSearchForm extends React.Component {
   }
 }
 
-class Report extends React.Component {
-  render() {
-    return <div>Reports index</div>
-  }
-}
+const Report: React.FunctionComponent = () => (
+  <section>
+    <h1>Reports index</h1>
+    <p>TBD</p>
+  </section>
+)
 
 /**
  * Message to show users with no roles assigned to them.
  * @param param0
  */
-const NewUserMessage: React.FunctionComponent<{ hasUser: boolean; roles: Role[] }> = ({
-  hasUser,
-  roles,
-}) =>
+const NewUserMessage: React.FunctionComponent<{
+  hasUser: boolean
+  roles: Role[]
+}> = ({ hasUser, roles }) =>
   hasUser && roles.length === 0 ? (
     <p>Welcome! Login successful – ask the administrator to add some permissions for you.</p>
   ) : null
