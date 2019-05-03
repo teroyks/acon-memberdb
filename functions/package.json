@@ -3,9 +3,9 @@
   "scripts": {
     "lint": "tslint --project tsconfig.json",
     "build": "tsc",
-    "deploy": "firebase deploy --only functions,firestore:rules",
+    "deploy": "firebase deploy --only functions,firestore:rules,hosting",
     "deploy:prod": "firebase use production && npm run deploy; firebase use default",
-    "serve": "concurrently \"npm:watch\" \"firebase serve --only functions\"",
+    "serve": "concurrently \"npm:watch\" \"firebase serve --only functions,hosting\"",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "test": "mocha -r ts-node/register test/**/*.spec.ts",
