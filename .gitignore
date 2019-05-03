@@ -1,5 +1,6 @@
 node_modules
 .firebaserc
+.firebase/
 .cache/
 dist/
 firebase.config.js
