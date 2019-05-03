@@ -18,6 +18,7 @@ type MemberData = {
 }
 
 type ProgramParticipantData = {
+  memberId: string
   fullName: string
   displayName: string
   email: string

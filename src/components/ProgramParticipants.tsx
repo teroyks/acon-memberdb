@@ -39,13 +39,19 @@ const ParticipantsList: React.FunctionComponent<{ people: db.ProgramParticipantD
 )
 
 const Participant: React.FunctionComponent<{ person: db.ProgramParticipantData }> = ({
-  person: { displayName, email, fullName, participateProgram, participateProgramAnswer },
+  person: { displayName, email, fullName, memberId, participateProgram, participateProgramAnswer },
 }) => (
   <tr>
     <td>{displayName !== fullName ? `${displayName} (${fullName})` : fullName}</td>
     <td>{email}</td>
     <td>{participateProgram ? '✅' : '*️⃣'}</td>
-    <td>{participateProgram ? '' : <span>({participateProgramAnswer})</span>}</td>
+    <td>
+      {participateProgram || !participateProgramAnswer ? (
+        ''
+      ) : (
+        <span title={memberId}>({participateProgramAnswer})</span>
+      )}
+    </td>
   </tr>
 )
 
