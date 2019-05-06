@@ -26,10 +26,17 @@ type ProgramParticipantData = {
   participateProgramAnswer: string
 }
 
+type BadgeData = {
+  displayName: string
+  location: string
+  twitter: string
+}
+
 // database document property names
 const props = {
   member: {
     checkDisplayNameSort: 'checkDisplayNameSort',
+    displayNameSort: 'displayNameSort',
     firstName: 'firstName',
     lastName: 'lastName',
     participateProgram: 'participateProgram',
@@ -73,9 +80,21 @@ const fetchProgramParticipants = async () => {
   return [...sure, ...perhaps]
 }
 
+const fetchBadgeData = async () => {
+  const querySnapshot = await membersRef.orderBy(props.member.displayNameSort).get()
+  const members: BadgeData[] = []
+  querySnapshot.forEach(docSnapshot => {
+    members.push(docSnapshot.data() as BadgeData)
+  })
+
+  return members
+}
+
 export {
+  BadgeData,
   MemberData,
   ProgramParticipantData,
+  fetchBadgeData,
   fetchCheckSortNameMembers,
   fetchProgramParticipants,
   fetchUser,
