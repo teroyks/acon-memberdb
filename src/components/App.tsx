@@ -1,8 +1,9 @@
 import * as React from 'react'
-import { BrowserRouter, Redirect, Route } from 'react-router-dom'
+import { BrowserRouter, NavLink, Redirect, Route } from 'react-router-dom'
 import { Role, UserData } from '../common/user'
 import * as firebase from '../firebase'
 import { fetchUser } from '../firestore'
+import BadgeList from './BadgeList'
 import MemberForm from './MemberEditor'
 import MembersList from './MembersList'
 import MembersToCheck from './MembersToCheck'
@@ -126,6 +127,13 @@ class App extends React.Component<any, AppState> {
               component={MembersToCheck}
             />
 
+            <AuthRoute
+              exact
+              path={UrlPath.badgeReport}
+              auth={user.roles.includes(Role.user)}
+              component={BadgeList}
+            />
+
             <Route
               render={() => (
                 <NewUserMessage
@@ -154,7 +162,11 @@ class MemberSearchForm extends React.Component {
 const Report: React.FunctionComponent = () => (
   <section>
     <h1>Reports index</h1>
-    <p>TBD</p>
+    <ul>
+      <li>
+        <NavLink to={UrlPath.badgeReport}>Badge data</NavLink>
+      </li>
+    </ul>
   </section>
 )
 
