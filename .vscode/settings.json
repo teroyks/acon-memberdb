@@ -1,0 +1,8 @@
+{
+  "prettier.semi": false,
+  "prettier.jsxSingleQuote": true,
+  "typescript.preferences.quoteStyle": "single",
+  "prettier.singleQuote": true,
+  "prettier.printWidth": 100,
+  "prettier.tslintIntegration": true
+}
