@@ -3,7 +3,7 @@ import 'firebase/auth'
 import 'firebase/firestore'
 import firebaseui from 'firebaseui'
 
-import { devConfig } from './config/firebase.config'
+import { devConfig, prodConfig } from './config/firebase.config'
 
 const uiConfig = {
   signInSuccessUrl: '/',
