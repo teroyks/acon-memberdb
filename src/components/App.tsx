@@ -8,6 +8,7 @@ import MemberForm from './MemberEditor'
 import MembersList from './MembersList'
 import MembersToCheck from './MembersToCheck'
 import ProgramParticipants from './ProgramParticipants'
+import RegistrationList from './RegistrationList'
 import { AuthRoute } from './route-helper'
 import { Nav, UrlPath } from './SiteNav'
 
@@ -133,6 +134,12 @@ class App extends React.Component<any, AppState> {
               auth={user.roles.includes(Role.user)}
               component={BadgeList}
             />
+            <AuthRoute
+              exact
+              path={UrlPath.registrationReport}
+              auth={user.roles.includes(Role.user)}
+              component={RegistrationList}
+            />
 
             <Route
               render={() => (
@@ -165,6 +172,9 @@ const Report: React.FunctionComponent = () => (
     <ul>
       <li>
         <NavLink to={UrlPath.badgeReport}>Badge data</NavLink>
+      </li>
+      <li>
+        <NavLink to={UrlPath.registrationReport}>Members list for registration</NavLink>
       </li>
     </ul>
   </section>

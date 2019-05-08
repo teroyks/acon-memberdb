@@ -9,6 +9,7 @@ enum UrlPath {
   home = '/',
   reports = '/reports',
   badgeReport = '/reports-badges',
+  registrationReport = '/reports-signup-sheet',
   member = '/member',
   membersList = '/membersList',
   progParticipants = '/programParticipants',

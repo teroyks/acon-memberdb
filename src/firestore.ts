@@ -32,6 +32,11 @@ type BadgeData = {
   twitter: string
 }
 
+type RegistrationData = {
+  fullName: string
+  badgeName: string
+}
+
 // database document property names
 const props = {
   member: {
@@ -94,6 +99,7 @@ export {
   BadgeData,
   MemberData,
   ProgramParticipantData,
+  RegistrationData,
   fetchBadgeData,
   fetchCheckSortNameMembers,
   fetchProgramParticipants,
