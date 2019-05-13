@@ -66,7 +66,7 @@ const fetchUser = (uid: string): Promise<UserResult> =>
 const fetchCheckSortNameMembers = () =>
   membersRef.where(props.member.checkDisplayNameSort, '==', true)
 
-const _fetchParticipantsOfType = async matchVal => {
+const fetchParticipantsOfType = async matchVal => {
   const querySnapshot = await membersRef
     .where(props.member.participateProgram, '==', matchVal)
     .get()
@@ -79,8 +79,8 @@ const _fetchParticipantsOfType = async matchVal => {
 
 const fetchProgramParticipants = async () => {
   const [sure, perhaps] = await Promise.all([
-    _fetchParticipantsOfType(true),
-    _fetchParticipantsOfType(null),
+    fetchParticipantsOfType(true),
+    fetchParticipantsOfType(null),
   ])
   return [...sure, ...perhaps]
 }
