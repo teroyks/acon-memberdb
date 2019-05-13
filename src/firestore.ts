@@ -85,6 +85,16 @@ const fetchProgramParticipants = async () => {
   return [...sure, ...perhaps]
 }
 
+const fetchRegistrationList = async () => {
+  const querySnapshot = await membersRef.orderBy(props.member.displayNameSort).get()
+  const members: RegistrationData[] = []
+  querySnapshot.forEach(docSnapshot => {
+    members.push(docSnapshot.data() as RegistrationData)
+  })
+
+  return members
+}
+
 const fetchBadgeData = async () => {
   const querySnapshot = await membersRef.orderBy(props.member.displayNameSort).get()
   const members: BadgeData[] = []
@@ -103,6 +113,7 @@ export {
   fetchBadgeData,
   fetchCheckSortNameMembers,
   fetchProgramParticipants,
+  fetchRegistrationList,
   fetchUser,
   membersRef,
   props,

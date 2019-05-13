@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { RegistrationData } from '../firestore'
+import { fetchRegistrationList, RegistrationData } from '../firestore'
 
 class RegistrationList extends React.Component {
   state = {
@@ -8,12 +8,10 @@ class RegistrationList extends React.Component {
   }
 
   async componentDidMount() {
+    const members: RegistrationData[] = await fetchRegistrationList()
     this.setState({
       fetching: false,
-      members: [
-        { fullName: 'foo bar', badgeName: null },
-        { fullName: 'Joo Jaa', badgeName: 'Jooppi' },
-      ],
+      members,
     })
   }
 
@@ -36,7 +34,7 @@ const ListTable: React.FunctionComponent<{ members: RegistrationData[] }> = ({ m
   <table style={{ border: '1px solid gray', width: '100%' }}>
     <thead>
       <tr>
-        <th style={{ width: '6%' }}>Arrival</th>
+        <th style={{ width: '6%' }}>Arrived</th>
         <th style={{ width: '47%', textAlign: 'left' }}>Name</th>
         <th style={{ width: '47%', textAlign: 'left' }}>Badge Name</th>
       </tr>
