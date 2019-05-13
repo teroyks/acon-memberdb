@@ -84,9 +84,9 @@ const MembersList: React.FunctionComponent<{ docs: DocItem[] }> = ({ docs }) =>
   ) : null
 
 const MemberLink: React.FunctionComponent<{ member: db.MemberData }> = ({
-  member: { displayName, displayNameSort },
+  member: { displayName, displayNameSort, memberId },
 }) => (
-  <tr>
+  <tr title={memberId}>
     <td>{displayName}</td>
     <td>{displayNameSort}</td>
   </tr>
