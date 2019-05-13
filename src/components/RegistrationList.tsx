@@ -41,7 +41,7 @@ const ListTable: React.FunctionComponent<{ members: RegistrationData[] }> = ({ m
     </thead>
     <tbody>
       {members.map(m => (
-        <tr key={m.fullName}>
+        <tr key={m.memberId}>
           <td style={tableCellStyle} />
           <td style={tableCellStyle}>{m.fullName}</td>
           <td style={tableCellStyle}>{m.badgeName}</td>
