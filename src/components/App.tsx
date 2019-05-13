@@ -4,6 +4,7 @@ import { Role, UserData } from '../common/user'
 import * as firebase from '../firebase'
 import { fetchUser } from '../firestore'
 import BadgeList from './BadgeList'
+import FullNamesToCheck from './FullNamesToCheck'
 import MemberForm from './MemberEditor'
 import MembersList from './MembersList'
 import MembersToCheck from './MembersToCheck'
@@ -126,6 +127,12 @@ class App extends React.Component<any, AppState> {
               path={UrlPath.home}
               auth={user.roles.includes(Role.editor)}
               component={MembersToCheck}
+            />
+            <AuthRoute
+              exact
+              path={UrlPath.home}
+              auth={user.roles.includes(Role.editor)}
+              component={FullNamesToCheck}
             />
 
             <AuthRoute
