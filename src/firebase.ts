@@ -6,11 +6,11 @@ import firebaseui from 'firebaseui'
 import { devConfig, prodConfig } from './config/firebase.config'
 
 const uiConfig = {
-  signInSuccessUrl: '/',
   signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+  signInSuccessUrl: '/',
 }
 
-firebase.initializeApp(devConfig)
+firebase.initializeApp(prodConfig)
 
 const auth = firebase.auth
 const ui = new firebaseui.auth.AuthUI(auth())
