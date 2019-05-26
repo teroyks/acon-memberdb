@@ -8,11 +8,15 @@ enum Mode {
 
 type InputCallback = (event: React.ChangeEvent<HTMLInputElement>) => void
 
+const showAllMembers = (member: BadgeData): boolean => true
+const showOnlyMembersWithoutBadge = (member: BadgeData): boolean => member.badgePrinted === false
+
 class BadgeList extends React.Component {
   state = {
     fetching: true,
     listMode: Mode.table,
     members: [] as BadgeData[],
+    onlyMembersWithoutBadge: false,
   }
 
   async componentDidMount() {
@@ -27,8 +31,15 @@ class BadgeList extends React.Component {
     this.setState({ listMode: parseInt(event.target.value, null) })
   }
 
+  handleFilterChange: InputCallback = event => {
+    this.setState({ onlyMembersWithoutBadge: !this.state.onlyMembersWithoutBadge })
+  }
+
+  useFilter = () =>
+    this.state.onlyMembersWithoutBadge ? showOnlyMembersWithoutBadge : showAllMembers
+
   render() {
-    const { fetching, listMode, members } = this.state
+    const { fetching, listMode, members, onlyMembersWithoutBadge } = this.state
     return (
       <section>
         <h1>Members – Badge Data</h1>
@@ -36,11 +47,12 @@ class BadgeList extends React.Component {
           <p>Loading…</p>
         ) : (
           <div>
-            <ModeChangeButtons
-              currentMode={this.state.listMode}
-              modeUpdateFunction={this.handleModeChange}
+            <ModeChangeButtons currentMode={listMode} modeUpdateFunction={this.handleModeChange} />
+            <FilterButton
+              currentState={onlyMembersWithoutBadge}
+              updateFunction={this.handleFilterChange}
             />
-            <BadgeDataList members={members} mode={listMode} />
+            <BadgeDataList members={members.filter(this.useFilter())} mode={listMode} />
           </div>
         )}
       </section>
@@ -70,6 +82,18 @@ const ModeChangeButtons: React.FunctionComponent<{
         onChange={modeUpdateFunction}
       />
       CSV
+    </label>
+  </p>
+)
+
+const FilterButton: React.FunctionComponent<{
+  currentState: boolean
+  updateFunction: InputCallback
+}> = ({ currentState, updateFunction }) => (
+  <p>
+    <label title='Show only members without a printed badge'>
+      <input type='checkbox' checked={currentState} onChange={updateFunction} />
+      No badge
     </label>
   </p>
 )

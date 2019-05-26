@@ -30,6 +30,7 @@ type ProgramParticipantData = {
 }
 
 type BadgeData = {
+  badgePrinted: boolean
   displayName: string
   location: string
   twitter: string
