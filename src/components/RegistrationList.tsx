@@ -35,14 +35,18 @@ const ListTable: React.FunctionComponent<{ members: RegistrationData[] }> = ({ m
     <thead>
       <tr>
         <th style={{ width: '6%' }}>Arrived</th>
-        <th style={{ width: '47%', textAlign: 'left' }}>Name</th>
-        <th style={{ width: '47%', textAlign: 'left' }}>Badge Name</th>
+        <th style={{ width: '6%' }}>Printed Badge</th>
+        <th style={{ width: '44%', textAlign: 'left' }}>Name</th>
+        <th style={{ width: '44%', textAlign: 'left' }}>Badge Name</th>
       </tr>
     </thead>
     <tbody>
       {members.map(m => (
-        <tr key={m.memberId}>
+        <tr key={m.memberId} title={m.memberId}>
           <td style={tableCellStyle} />
+          <td style={tableCellStyle} align='center'>
+            {m.badgePrinted !== false ? '✓️' : ''}
+          </td>
           <td style={tableCellStyle}>{m.fullName}</td>
           <td style={tableCellStyle}>{m.badgeName}</td>
         </tr>

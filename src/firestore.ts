@@ -38,6 +38,7 @@ type BadgeData = {
 type RegistrationData = {
   fullName: string
   badgeName: string
+  badgePrinted: boolean
   memberId: string
 }
 
